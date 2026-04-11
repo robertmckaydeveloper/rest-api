@@ -2,7 +2,9 @@ package com.example.restapi.controller;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,4 +33,13 @@ public class CustomerController {
         return customerService.createCustomer(customer);
     }
 
+    @DeleteMapping("/id/{id}")
+    public void deleteCustomerById(@PathVariable Long id) {
+        customerService.deleteCustomerById(id);
+    }
+
+    @DeleteMapping("/name/{name}")
+    public int deleteCustomerByName(@PathVariable String name) {
+        return customerService.deleteCustomerByName(name);
+    }
 }
