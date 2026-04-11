@@ -12,7 +12,7 @@ public class CustomerTest {
     private TestEntityManager entityManager;
 
     @Test
-    public void testCustomerConstructor() {
+    public void shouldCreateCustomer() {
 
         var name = "robert";
         var email = "robert.mckay.developer@gmail.com";
