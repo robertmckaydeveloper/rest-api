@@ -1,12 +1,30 @@
+name: restapi-project
+
 volumes:
   postgres-data:
-  dev-realm:
+  git-home:
 
 services:
-  app:
+
+#   frontend:
+#     container_name: reactdev
+#     image: node:20-alpine
+#     working_dir: /app
+#     volumes:
+#       - ./frontend:/app # Mounts your react folder
+#     ports:
+#       - "3000:3000"
+#     environment:
+#       - CHOKIDAR_USEPOLLING=true # Helps with hot-reload in Docker
+#     command: sh -c "npm install && npm start"
+#     networks:
+#       - app-network
+
+
+  backend:
     container_name: javadev
     build: 
-      context: .
+      context: ./backend
       dockerfile: Dockerfile
     environment:
       # NOTE: POSTGRES_DB/USER/PASSWORD should match values in db container
@@ -16,7 +34,8 @@ services:
         POSTGRES_HOSTNAME: db
 
     volumes:
-      - ../..:/workspaces:cached
+      - .:/workspaces/restapi:cached
+      - git-home:/home/vscode
       
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
@@ -60,7 +79,7 @@ services:
     image: quay.io/keycloak/keycloak:latest
     command: ["start-dev", "--import-realm"]
     volumes:
-      - ./dev-realm-realm.json:/opt/keycloak/data/import/dev-realm-realm.json:ro
+      - ./keycloak/dev-realm-realm.json:/opt/keycloak/data/import/dev-realm-realm.json:ro
     environment:
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
@@ -70,8 +89,6 @@ services:
       - app-network
     ports:
       - "8081:8080"
-
-
 
 networks:
   app-network:
