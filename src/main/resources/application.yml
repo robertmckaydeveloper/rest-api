@@ -12,6 +12,13 @@ spring:
     hibernate:
       ddl-auto: update
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://keycloak:8080/realms/my-dev-realm/protocol/openid-connect/certs
+          issuer-uri: http://localhost:8081/realms/my-dev-realm
+
 management:
   info:
     app:
@@ -32,3 +39,8 @@ management:
     web:
       exposure:
         include: "health,info,shutdown"
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2: DEBUG
