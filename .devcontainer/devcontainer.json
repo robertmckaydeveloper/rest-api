@@ -22,7 +22,8 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"ms-ossdata.vscode-pgsql"
+				"ms-ossdata.vscode-pgsql",
+				"postman.postman-for-vscode"
 			]
 		}
 	}
