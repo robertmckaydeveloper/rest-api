@@ -1,11 +1,11 @@
 import axios from 'axios'
 import keycloak from '../auth/keycloak'
 
-const api = axios.create({
+const apiClient = axios.create({
     baseURL: 'http://backend:8080'
 });
 
-api.interceptors.request.use(
+apiClient.interceptors.request.use(
     async (config) => {
         if (keycloak.token) {
             try {
@@ -23,4 +23,4 @@ api.interceptors.request.use(
     }
 );
 
-export default api;
+export default apiClient;
