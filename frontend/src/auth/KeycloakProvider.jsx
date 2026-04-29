@@ -1,8 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useContext, useRef, createContext } from 'react'
 import keycloak from './keycloak'
 
-const KeycloakProvider = ({ children }) => {
+const AuthContext = createContext(null);
+
+export const KeycloakProvider = ({ children }) => {
     const [authenticated, setAuthenticated] = useState(false);
+    const [loading, setLoading] = useState(true)
     const isRun = useRef(false)
 
     useEffect(() => {
@@ -10,20 +13,35 @@ const KeycloakProvider = ({ children }) => {
         isRun.current = true;
 
         keycloak.init({
-            onLoad: 'login-required',
-            checkLoginIframe: false
+            onLoad: 'check-sso',
+            checkLoginIframe: false,
+            pkceMethod: 'S256'
         })
         .then((auth) => {
-            setAuthenticated(auth)
+            setAuthenticated(auth);
+            setLoading(false);
         })
-        .catch(err => console.error("Keycloak init error", err));
+        .catch(err => {
+            console.error("Keycloak init error", err);
+            setLoading(false);
+        });
     }, []);
 
-    if (!authenticated) {
+    if (loading) {
         return <div>Loading Authentication...</div>;
     }
 
-    return children;
+    return (
+        <AuthContext.Provider value={{ authenticated, keycloak }}>
+            {children}
+        </AuthContext.Provider>
+    );
 };
 
-export default KeycloakProvider;
+export const useAuth = () => {
+    const context = useContext(AuthContext);
+    if (!context) {
+        throw new Error("useAuth must be used within a KeycloakProvider")
+    }
+    return context;
+};
