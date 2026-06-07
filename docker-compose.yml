@@ -26,6 +26,8 @@ services:
     build: 
       context: ./backend
       dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
     environment:
       # NOTE: POSTGRES_DB/USER/PASSWORD should match values in db container
         POSTGRES_PASSWORD: postgres
