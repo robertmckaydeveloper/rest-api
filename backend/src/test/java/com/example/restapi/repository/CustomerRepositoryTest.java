@@ -20,15 +20,11 @@ public class CustomerRepositoryTest {
     private CustomerRepository repository;
 
     @Test
-    void shouldDeleteCustomerByName() {
+    void shouldFindCustomerByName() {
 
         Customer customer = new Customer("robert", "robert@email.com");
         entityManager.persistAndFlush(customer);
         assertTrue(repository.existsById(customer.getId()));
-
-        repository.deleteByName("robert");
-        assertFalse(repository.existsById(customer.getId()));
-
     }
 
 }

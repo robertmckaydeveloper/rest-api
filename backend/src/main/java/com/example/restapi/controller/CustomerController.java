@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.restapi.entity.Customer;
@@ -24,8 +25,10 @@ public class CustomerController {
     }
 
     @GetMapping
-    public List<Customer> getAllCustomers() {
-        return customerService.getAllCustomers();
+    public List<Customer> getCustomers(@RequestParam(required = false) String name) {
+        return (name != null && !name.isEmpty()) 
+            ? customerService.getCustomerByName(name)
+            : customerService.getAllCustomers();
     }
 
     @PostMapping
@@ -33,13 +36,8 @@ public class CustomerController {
         return customerService.createCustomer(customer);
     }
 
-    @DeleteMapping("/id/{id}")
-    public void deleteCustomerById(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public void deleteCustomer(@PathVariable Long id) {
         customerService.deleteCustomerById(id);
-    }
-
-    @DeleteMapping("/name/{name}")
-    public int deleteCustomerByName(@PathVariable String name) {
-        return customerService.deleteCustomerByName(name);
     }
 }
